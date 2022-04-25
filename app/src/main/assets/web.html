@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+자동 브릿지 호출 예제
+</body>
+</html>
+<script>
+    var BrigeJS = {
+        COMMAND: {
+            InicisClose: 'InicisClose'
+        },
+
+        isInApp: function () {
+            return (this.isInAppIos() || this.isInAppAndroid());
+        },
+
+        isInAppIos: function () {
+            return window.webkit && window.webkit.messageHandlers && window.webkit.messageHandlers.logIn;
+        },
+
+        isInAppAndroid: function () {
+            return window.Hancom;
+        },
+
+        /**
+         * app 기능 호출 - android, ios 공용
+         * @param cmd
+         * @param val
+         */
+        call: function (command, value) {
+
+            if (typeof command === 'undefined' || command == null) {
+                alert('!command');
+                return;
+            }
+
+            if (this.isInAppIos()) {
+                window.webkit.messageHandlers[command].postMessage(value);
+            } else if (this.isInAppAndroid()) {
+                if (value) {
+                    window.Hancom[command](value);
+                } else {
+                    window.Hancom[command]();
+                }
+            }
+        }
+    };
+    BrigeJS.call(BrigeJS.COMMAND.InicisClose)
+</script>
+
